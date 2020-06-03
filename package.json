@@ -1,0 +1,29 @@
+{
+  "name": "easy-oss",
+  "version": "1.0.0",
+  "description": "阿里云oss的对接库，封装了常见的使用场景。",
+  "main": "index.js",
+  "scripts": {
+    "start": "echo \"Error: no start specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuri2peter/easy-oss.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yuri2peter/easy-oss/issues"
+  },
+  "homepage": "https://github.com/yuri2peter/easy-oss#readme",
+  "dependencies": {
+    "moment-timezone": "^0.5.27"
+  },
+  "devDependencies": {
+    "eslint": "^6.5.1",
+    "prettier": "^1.18.2",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-plugin-prettier": "^3.1.1"
+  }
+}
