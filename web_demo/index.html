@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>OSS Upload Demo</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <input type="file" id="ipt" />
+    <button id="btn">Upload</button>
+  </body>
+  <script>
+    const ipt = document.getElementById('ipt');
+    const btn = document.getElementById('btn');
+
+    function upload({
+      url,
+      file,
+      policy,
+      accessKeyId,
+      signature,
+      prefix,
+      onUploadProgress = () => {},
+      onCancelHandleAvaliable = () => {},
+    }) {
+      const formData = new FormData();
+      const name = prefix + file.name;
+      formData.append('key', name);
+      formData.append('name', file.name);
+      formData.append('policy', policy);
+      formData.append('OSSAccessKeyId', accessKeyId);
+      formData.append('success_action_status', '200');
+      formData.append('callback', '');
+      formData.append('signature', signature);
+      formData.append('file', file);
+
+      const { CancelToken } = axios;
+      const cancelSource = CancelToken.source();
+      onCancelHandleAvaliable(() => {
+        cancelSource.cancel('Upload canceled.');
+      });
+      return axios({
+        url,
+        method: 'post',
+        data: formData,
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress,
+        cancelToken: cancelSource.token,
+      }).then(() => ({
+        name,
+        src: url + '/' + name,
+      }));
+    }
+
+    let uploading = false;
+    let uploadCancelHandle = null;
+
+    btn.onclick = () => {
+      const file = ipt.files[0];
+      if (!file) {
+        alert('File is not selected!');
+        return;
+      }
+
+      // Cancels uploading.
+      if (uploading) {
+        if (uploadCancelHandle) {
+          uploadCancelHandle();
+        }
+        return;
+      }
+
+      // Marks uploading status.
+      uploading = true;
+
+      // Policy and signature should be obtained from the serve.
+      const options = {
+        file, // The file needs to be uploaded.
+        // expiration: "2020-06-04T10:00:56.796Z",
+        signature: '99AKeybPlpim87h+r0KhEbJvhxE=',
+        accessKeyId: 'LTAI4G7rTxwtu7FGzhPDdwzK',
+        policy:
+          'eyJleHBpcmF0aW9uIjoiMjAyMC0wNi0wNFQxMDowMDo1Ni43OTZaIiwiY29uZGl0aW9ucyI6W1siY29udGVudC1sZW5ndGgtcmFuZ2UiLDAsNTI0Mjg4MF0sWyJzdGFydHMtd2l0aCIsIiRrZXkiLCJ0ZXN0LyJdXX0=',
+        // prefix: "test/",
+        // maxLength: 5120,
+        url: 'https://OSS_BUCKET.oss-cn-hangzhou.aliyuncs.com', // OSS url
+
+        // Uploading progress
+        onUploadProgress: e => {
+          btn.innerText = (((e.loaded / e.total) * 100) | 0) + '%';
+        },
+        onCancelHandleAvaliable: cancelHandle => {
+          // Use `cancelHandle()` if you want to abort.
+          uploadCancelHandle = cancelHandle;
+        },
+      };
+
+      // Here we go.
+      upload(options)
+        .then(data => {
+          alert('Upload completed.');
+          console.log(data);
+        })
+        .catch(console.warn)
+        .finally(() => {
+          btn.innerText = 'Uplaod';
+          uploading = false;
+        });
+
+      // Ends of click event.
+    };
+  </script>
+</html>

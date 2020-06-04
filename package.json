@@ -1,8 +1,8 @@
 {
-  "name": "easy-oss",
+  "name": "@yuri2/easy-oss",
   "version": "1.0.0",
   "description": "阿里云oss的对接库，封装了常见的使用场景。",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
     "start": "echo \"Error: no start specified\" && exit 1",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,7 +19,6 @@
   "homepage": "https://github.com/yuri2peter/easy-oss#readme",
   "dependencies": {
     "ali-oss": "^6.8.0",
-    "moment-timezone": "^0.5.27",
     "recursive-readdir-async": "^1.1.6"
   },
   "devDependencies": {

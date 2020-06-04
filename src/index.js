@@ -1,6 +1,7 @@
 const OssAli = require('ali-oss');
 const rra = require('recursive-readdir-async');
 const path = require('path');
+const crypto = require('crypto');
 
 const isDir = (filePath = '') => filePath.endsWith('/');
 function arrayGroup(data, n = 10) {
@@ -20,6 +21,7 @@ const ACL_POLICE = {
 
 class EasyOss {
   constructor({ ossOptions }) {
+    this.ossOptions = ossOptions;
     this.ossClient = new OssAli(ossOptions);
   }
 
@@ -205,6 +207,56 @@ class EasyOss {
     for (const objectNamesGroup of nameGroup) {
       await this.ossClient.deleteMulti(objectNamesGroup, { quiet: true });
     }
+  }
+
+  /**
+   * 获取用于GET的链接，可限速
+   * @param {string} name objectName
+   * @param {number} trafficLimit 限速，单位KB/S
+   * @returns {string} url
+   */
+  async getSignatureUrlForGet(name, trafficLimit = 200) {
+    const url = this.ossClient.signatureUrl(name, {
+      trafficLimit: 8 * 1024 * trafficLimit, // 设置限速，最小100KB/s。
+      method: 'GET', // 设置put请求方法。
+    });
+    return url;
+  }
+
+  /**
+   * 获取客户端上传文件（postObject）所需的签名等重要信息
+   * @param {string} prefix 前缀限制，推荐文件夹格式如 abc/
+   * @param {number} expire 过期时间，单位秒
+   * @param {number} maxSize 文件大小上限，单位KB
+   * @returns {object<{ expiration, signature, accessKeyId, policy, prefix, maxSize, url }>}
+   */
+  getPostSignatureForUpload(prefix = '', expire = 3600, maxSize = 5 * 1024) {
+    const expiration = new Date(
+      new Date().getTime() + expire * 1000,
+    ).toISOString();
+    const police = {
+      expiration,
+      conditions: [
+        ['content-length-range', 0, maxSize * 1024],
+        ['starts-with', '$key', prefix],
+      ],
+    };
+    const policeText = JSON.stringify(police);
+    const base64_policy = Buffer.from(policeText).toString('base64');
+    const signature = crypto
+      .createHmac('sha1', this.ossOptions.accessKeySecret)
+      .update(base64_policy)
+      .digest()
+      .toString('base64');
+    return {
+      expiration,
+      signature,
+      accessKeyId: this.ossOptions.accessKeyId,
+      policy: base64_policy,
+      prefix,
+      maxSize,
+      url: `https://${this.ossOptions.bucket}.${this.ossOptions.region}.aliyuncs.com`,
+    };
   }
 }
 

@@ -30,6 +30,37 @@
    ```
 6. 前往[RAM 用户管理页面](https://ram.console.aliyun.com/users)，找到我们刚才创建的用户，点击`添加权限`。选择`自定义策略`，添加我们刚才创建的自定义策略`admin_oss_easy_oss_test`并保存。
 
+7. 如果需要在 web 端、小程序端操作 oss，请开启跨域。在对应 oss 的管理页面中，选择“权限管理”->“跨域设置”，创建新的跨域规则。规则需要按照您的实际情况制定，可以先指定一个最宽松的规则，来源：\*，允许的 Methods：全部，允许的 Headers：\* 。
+
 至此，我们已经成功创建了一个 oss bucket 并且为其配置了一个可供编程 API 调用的 RAM 子账户。
 
 ## 使用
+
+```
+const EasyOss = require('easy-oss');
+
+// 按实际情况配置
+const ossOptions = {
+    "bucket": "easy-oss-test",
+    "region": "oss-cn-hangzhou",
+    "accessKeyId": "xxxxxxxxxxxxxxxxxxxxxxxx",
+    "accessKeySecret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+};
+
+// 创建操作实例
+const oss = new EasyOss({ ossOptions });
+
+// 列举当前bucket下所有文件
+oss.listPrefix('').then(console.log);
+```
+
+## 服务端 API
+
+完善中...
+
+您可[点击这里](./src/index.js)自行查看源码中的注释。
+
+## Web 客户端上传 demo
+
+Demo 文件位于`web_demo`目录下，包含一个在 web 端上传到指定 oss 目录下的示例。
+由于上传所需的信息具有时效性，测试 demo 前，请请先运行 `getPostSignatureForUpload` API，并将结果维护到 html 文件的 `options` 中。
