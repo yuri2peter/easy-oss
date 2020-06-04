@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/yuri2peter/easy-oss#readme",
   "dependencies": {
-    "moment-timezone": "^0.5.27"
+    "ali-oss": "^6.8.0",
+    "moment-timezone": "^0.5.27",
+    "recursive-readdir-async": "^1.1.6"
   },
   "devDependencies": {
     "eslint": "^6.5.1",
