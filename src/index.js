@@ -197,7 +197,7 @@ class EasyOss {
   }
 
   async deleteDir(dir) {
-    const dirName = isDir(dir) ? dir : dir + '/';
+    const dirName = dir ? (isDir(dir) ? dir : dir + '/') : ''; // 兼容了根目录的情况
     const objects = await this.listPrefixAll(dirName);
     const objectNames = objects.map(t => t.name);
     if (objectNames.length === 0) return;
