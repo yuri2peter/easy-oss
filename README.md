@@ -36,15 +36,15 @@
 
 ## 使用
 
-```
+```javascript
 const EasyOss = require('easy-oss');
 
 // 按实际情况配置
 const ossOptions = {
-    "bucket": "easy-oss-test",
-    "region": "oss-cn-hangzhou",
-    "accessKeyId": "xxxxxxxxxxxxxxxxxxxxxxxx",
-    "accessKeySecret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  bucket: 'easy-oss-test',
+  region: 'oss-cn-hangzhou',
+  accessKeyId: 'xxxxxxxxxxxxxxxxxxxxxxxx',
+  accessKeySecret: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 };
 
 // 创建操作实例
