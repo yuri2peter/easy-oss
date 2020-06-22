@@ -222,7 +222,7 @@ class EasyOss {
       trafficLimit: 8 * 1024 * trafficLimit, // 设置限速，最小100KB/s。
       method: 'GET', // 设置put请求方法。
     });
-    return url;
+    return url.replace(/^http:/, 'https:');
   }
 
   /**
