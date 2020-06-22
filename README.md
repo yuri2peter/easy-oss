@@ -37,7 +37,7 @@
 ## 使用
 
 ```javascript
-const EasyOss = require('easy-oss');
+const EasyOss = require('@yuri2/easy-oss');
 
 // 按实际情况配置
 const ossOptions = {
