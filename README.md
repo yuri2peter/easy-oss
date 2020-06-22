@@ -64,3 +64,7 @@ oss.listPrefix('').then(console.log);
 
 Demo 文件位于`web_demo`目录下，包含一个在 web 端上传到指定 oss 目录下的示例。
 由于上传所需的信息具有时效性，测试 demo 前，请请先运行 `getPostSignatureForUpload` API，并将结果维护到 html 文件的 `options` 中。
+
+## 同步 CNPM
+
+如果 CNPM 没有及时同步最新的软件包，可以访问[@yuri2/easy-oss](https://developer.aliyun.com/mirror/npm/package/@yuri2/easy-oss)，并点击`SYNC`按钮手动同步。
