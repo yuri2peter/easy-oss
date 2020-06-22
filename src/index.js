@@ -213,10 +213,12 @@ class EasyOss {
    * 获取用于GET的链接，可限速
    * @param {string} name objectName
    * @param {number} trafficLimit 限速，单位KB/S
+   * @param {number} expires 有效期（秒），默认3600
    * @returns {string} url
    */
-  async getSignatureUrlForGet(name, trafficLimit = 200) {
+  async getSignatureUrlForGet(name, trafficLimit = 200, expires = 3600) {
     const url = this.ossClient.signatureUrl(name, {
+      expires,
       trafficLimit: 8 * 1024 * trafficLimit, // 设置限速，最小100KB/s。
       method: 'GET', // 设置put请求方法。
     });
