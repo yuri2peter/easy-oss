@@ -209,6 +209,10 @@ class EasyOss {
     }
   }
 
+  async copy(from, to) {
+    await this.ossClient.copy(to, from);
+  }
+
   async copyDir(from, to) {
     const dirFrom = from ? (isDir(from) ? from : from + '/') : ''; // 兼容了根目录的情况
     const dirTo = from ? (isDir(to) ? to : to + '/') : ''; // 兼容了根目录的情况
@@ -217,7 +221,7 @@ class EasyOss {
     await Promise.all(
       objectNames.map(t => async () => {
         try {
-          await this.ossClient.copy(t, t.replace(dirFrom, dirTo));
+          await this.copy(t, t.replace(dirFrom, dirTo));
         } catch (e) {
           //
         }
