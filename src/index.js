@@ -209,6 +209,22 @@ class EasyOss {
     }
   }
 
+  async copyDir(from, to) {
+    const dirFrom = from ? (isDir(from) ? from : from + '/') : ''; // 兼容了根目录的情况
+    const dirTo = from ? (isDir(to) ? to : to + '/') : ''; // 兼容了根目录的情况
+    const objects = await this.listPrefixAll(dirFrom);
+    const objectNames = objects.map(t => t.name);
+    await Promise.all(
+      objectNames.map(t => async () => {
+        try {
+          await this.ossClient.copy(t, t.replace(dirFrom, dirTo));
+        } catch (e) {
+          //
+        }
+      }),
+    );
+  }
+
   /**
    * 获取用于GET的链接，可限速
    * @param {string} name objectName
