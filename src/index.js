@@ -219,13 +219,15 @@ class EasyOss {
     const objects = await this.listPrefixAll(dirFrom);
     const objectNames = objects.map(t => t.name);
     await Promise.all(
-      objectNames.map(t => async () => {
-        try {
-          await this.copy(t, t.replace(dirFrom, dirTo));
-        } catch (e) {
-          //
-        }
-      }),
+      objectNames.map(t =>
+        (async () => {
+          try {
+            await this.copy(t, t.replace(dirFrom, dirTo));
+          } catch (e) {
+            //
+          }
+        })(),
+      ),
     );
   }
 
