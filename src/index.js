@@ -40,11 +40,11 @@ class EasyOss {
   }
 
   /**
-   * 创建一个文件夹
-   * @param {string} dirName 必须以/结尾
+   * 创建一个空文件(如果是文件夹，需要以/结尾)
+   * @param {string} name
    */
-  createDir(dirName) {
-    return this.ossClient.put(dirName, Buffer.from([]));
+  createEmptyFile(name) {
+    return this.ossClient.put(name, Buffer.from([]));
   }
 
   async uploadLocalDir(ossDirName, localDir, onProgress = () => {}) {
