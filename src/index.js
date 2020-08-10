@@ -246,6 +246,7 @@ class EasyOss {
     expires = 3600,
     download = false,
   ) {
+    const fileName = name.split('/').pop() || 'download';
     const url = this.ossClient.signatureUrl(name, {
       expires,
       trafficLimit: 8 * 1024 * trafficLimit, // 设置限速，最小100KB/s。
@@ -254,6 +255,7 @@ class EasyOss {
         ? {
             response: {
               'content-type': 'application/octet-stream',
+              'Content-Disposition': `attachment;filename="${fileName}"`,
             },
           }
         : {}),
