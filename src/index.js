@@ -254,7 +254,7 @@ class EasyOss {
       ...(download
         ? {
             response: {
-              'content-type': 'application/octet-stream',
+              // 'content-type': 'application/octet-stream', // 由于BUG，设置更多的headers会导致签名失效。content-disposition已经足以满足下载附件的需求。
               'content-disposition': `attachment;filename="${fileName}"`,
             },
           }
