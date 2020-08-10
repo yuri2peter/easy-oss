@@ -255,7 +255,7 @@ class EasyOss {
         ? {
             response: {
               'content-type': 'application/octet-stream',
-              'Content-Disposition': `attachment;filename="${fileName}"`,
+              'content-disposition': `attachment;filename="${fileName}"`,
             },
           }
         : {}),
