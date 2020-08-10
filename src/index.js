@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 const OssAli = require('ali-oss');
 const rra = require('recursive-readdir-async');
 const path = require('path');
@@ -236,13 +237,26 @@ class EasyOss {
    * @param {string} name objectName
    * @param {number} trafficLimit 限速，单位KB/S
    * @param {number} expires 有效期（秒），默认3600
+   * @param {boolean} download 是否生成下载相关的headers
    * @returns {string} url
    */
-  async getSignatureUrlForGet(name, trafficLimit = 200, expires = 3600) {
+  async getSignatureUrlForGet(
+    name,
+    trafficLimit = 200,
+    expires = 3600,
+    download = false,
+  ) {
     const url = this.ossClient.signatureUrl(name, {
       expires,
       trafficLimit: 8 * 1024 * trafficLimit, // 设置限速，最小100KB/s。
       method: 'GET', // 设置put请求方法。
+      ...(download
+        ? {
+            response: {
+              'content-type': 'application/octet-stream',
+            },
+          }
+        : {}),
     });
     return url.replace(/^http:/, 'https:');
   }
